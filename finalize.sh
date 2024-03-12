@@ -21,7 +21,9 @@ rm filenames/filenames.txt;
 mv filenames ../../metadata/;
 cd ../../;
 # typeset, and do it twice for indexing purposes
-pdflatex main -interaction nonstopmode
-    && pdflatex main -interaction nonstopmode;
+jobname=ama_transcript
+pdflatex main -interaction nonstopmode -jobname $jobname
+    && pdflatex main -interaction nonstopmode -jobname $jobname;
 # restore former state of exceptional file.
 sed -i "s/\\\\#/\\#/" $pound_file;
+rm $jobname.{aux,toc,log}
