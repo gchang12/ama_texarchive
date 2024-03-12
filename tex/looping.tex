@@ -1,0 +1,35 @@
+\newread\ccRead
+\newread\fnameRead
+\newread\fanNameRead
+
+\newtoks\ccName
+\obeylines
+
+\openin\ccRead=./metadata/content-creators.txt
+% Don't want spaces in directory names...
+\catcode`\^^M=9
+\loop
+\read\ccRead to \vip
+\unless\ifeof\ccRead
+% Each section starts with the name of a content-creator
+    \startSection\vip
+% The name of the file containing list of fans who asked the cc something
+    \ccName={"./metadata/filenames/\vip.txt"}
+    {%
+    % Open two streams:
+    % - One to find the filename containing the q/a
+    % - Another to typeset underscored usernames
+    \openin\fnameRead=\the\ccName
+    \openin\fanNameRead=\the\ccName
+    \loop
+    \read\fnameRead to \fname
+    \unless\ifeof\fnameRead
+        \printTitle\fname\vip
+        \readQuestion\vip\fname
+        \readAnswer\vip\fname
+        \repeat
+    \closein\fnameRead%
+    \closein\fanNameRead%
+    }
+\repeat
+\closein\ccRead

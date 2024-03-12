@@ -1,0 +1,56 @@
+\catcode`\_=12
+\parindent=0pt
+\newread\readUrl
+
+% Macro linking to the original source URLs for each Q&A exchange
+% Takes as argument: "content-creator", "fan-name"
+% - double-quotes are necessary for spaced names
+% Read the file containing a single line with the URL
+\def\urlReader#1#2{%
+    \openin\readUrl="./output/ama_text/#2/#1/url_id.txt"
+% Save the line to \urlName
+    {\catcode`\^^M=9 \global\read\readUrl to \urlName}%
+    \closein\readUrl
+}
+
+% Extracts username from expanded macro containing filename
+%\def\getTitle#1.txt{#1}
+\def\urlTemplate#1{https://www.reddit.com/r/StarVStheForcesofEvil/comments/cll9u5/star_vs_the_forces_of_evil_ask_me_anything/#1/?context=3}
+
+% Read URL here
+% Change catcode of underscore to 13 for titling purposes
+\def\printAuthorName#1 #2\relax{\underline{#1}:\ \ }
+{\catcode`_=13
+    \gdef\printTitle#1#2{
+        \urlReader{#1}{#2}
+        {\catcode`_=13 \global\read\fanNameRead to \fanName}
+        \unless\ifx\fanName\empty
+        \subsection*{\href{\urlTemplate\urlName}{\fanName} asks...}
+        \fi
+    }
+}
+
+% Set nlc=5 and obeylines/spaces
+\def\restoreNL{\catcode`\^^M=5 \obeylines\catcode`&=12\catcode`&=12\catcode`^=12}%\catcode`#=12}
+
+% Input question here in italics after restoring the newline
+\def\readQuestion#1#2{\bgroup\it\restoreNL \input "./output/ama_text/#1/#2/question_text.txt" \medskip\egroup}
+
+\newdimen\authorNameSize
+\authorNameSize=\hsize
+\divide\authorNameSize by 8
+
+% Do the same for here for the answer
+\def\readAnswer#1#2{\bgroup
+    \restoreNL\par
+    \moveright\authorNameSize
+    \vbox{\noindent\llap{
+        \hbox to \authorNameSize{\expandafter\printAuthorName\vip\relax}%
+    }%
+    \divide\hsize by 8
+    \multiply\hsize by 7
+    \input "./output/ama_text/#1/#2/answer_text.txt" }
+\egroup}
+
+% Obligatory custom section command
+\def\startSection#1{\newpage\section{#1}}
