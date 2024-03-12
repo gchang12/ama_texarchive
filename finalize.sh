@@ -2,6 +2,7 @@
 # TeX-escape pound-sign
 #echo "Please escape pound-sign";
 #read;
+# temporarily alter contents of an exceptional file.
 pound_file=output/ama_text/"Aaron Hammersley"/IWantFries21/answer_text.txt;
 sed -i "s/\\#/\\\\#/" $pound_file;
 # generate metadata
@@ -22,3 +23,5 @@ cd ../../;
 # typeset, and do it twice for indexing purposes
 pdflatex main -interaction nonstopmode
     && pdflatex main -interaction nonstopmode;
+# restore former state of exceptional file.
+sed -i "s/\\\\#/\\#/" $pound_file;
