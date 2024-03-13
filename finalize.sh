@@ -3,8 +3,8 @@
 #echo "Please escape pound-sign";
 #read;
 # temporarily alter contents of an exceptional file.
-pound_file=output/ama_text/"Aaron Hammersley"/IWantFries21/answer_text.txt;
-sed -i "s/\\#/\\\\#/" $pound_file;
+#pound_file=output/ama_text/"Aaron Hammersley"/IWantFries21/answer_text.txt;
+#sed -i "s/\\#/\\\\#/" $pound_file;
 # generate metadata
 cd output/ama_text/;
 ls --sort=time --reverse > ../../metadata/content-creators.txt;
@@ -20,10 +20,5 @@ for cc_name in *; do (
 rm filenames/filenames.txt;
 mv filenames ../../metadata/;
 cd ../../;
-# typeset, and do it twice for indexing purposes
-jobname=ama_transcript
-pdflatex main -interaction nonstopmode -jobname $jobname
-    && pdflatex main -interaction nonstopmode -jobname $jobname;
 # restore former state of exceptional file.
-sed -i "s/\\\\#/\\#/" $pound_file;
-rm $jobname.{aux,toc,log}
+#sed -i "s/\\\\#/\\#/" $pound_file;
